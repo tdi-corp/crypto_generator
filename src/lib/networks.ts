@@ -1,5 +1,5 @@
 import { IStf } from "@/types/form"
-import { EendpointServices, ICoinData, TClients, TEndpoinData, TPathItem } from "@/types/networks"
+import { EendpointServices, ICoinData, TEndpoinData, TPathItem } from "@/types/networks"
 
 /**
  * Coin data
@@ -92,12 +92,12 @@ export const getBalanceEndpoints: Array<[string, keyof typeof EendpointServices,
     ['dogecoin', 'blockcypher', {code, chain: '_main', address}], //doge
 ]
 
-const clients: TClients = {
-    coinomi: {
-        bgold: [
-            3, 4
-        ]
-    },
-    guarda: {},
-    trustwallet: {},
-}
+// const clients: TClients = {
+//     coinomi: {
+//         bgold: [
+//             3, 4
+//         ]
+//     },
+//     guarda: {},
+//     trustwallet: {},
+// }
