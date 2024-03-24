@@ -32,7 +32,11 @@ export const updateCoin = createAsyncThunk<
 export const generatorSlice = createSlice({
   name: 'generator',
   initialState,
-  reducers: {},
+  reducers: {
+    clear: (state) => {
+      state.data = []
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(createCoin.fulfilled, (state, {payload}) => {  
       const gnr = state.data
@@ -75,6 +79,8 @@ export const generatorSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 // export const { createGenerator } = generatorSlice.actions
+
+export const {clear} = generatorSlice.actions
 
 export default generatorSlice.reducer
 

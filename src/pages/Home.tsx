@@ -42,7 +42,7 @@ import { Checkbox } from "@/components/ui/Checkbox"
 
 import { formSchema, secretFieldData, defaultValues, TPrimaryRequest, IPrimaryResponse } from "@/types/form"
 import { EyeClosedIcon, EyeOpenIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons"
-import { createCoin, updateCoin } from "@/store/generatorSlice"
+import { clear, createCoin, updateCoin } from "@/store/generatorSlice"
 import { useAppDispatch, useAppSelector } from "@/hooks/store"
 import { setCoinToState } from "@/lib/crypto"
 import { toast } from "@/components/ui/use-toast"
@@ -225,6 +225,8 @@ const Home = () => {
                     }}
                   />
 
+                  <ClearButton />
+
                 </div>
               </div>
             </form>
@@ -346,6 +348,24 @@ const PrivateKey = ({privateKey}: {privateKey: string | undefined}) => {
     </div>
   )
 }
+
+const ClearButton = () => {
+  const dispatch = useAppDispatch()
+
+  return (
+    <Button 
+      variant="outline"
+      className="w-full mt-5"
+      onClick={(e) => {
+        e.preventDefault();
+        dispatch(clear())
+      }}
+    >
+      Clear
+    </Button>
+  )
+}
+
 
 const Headline = (): JSX.Element => {
   return (
