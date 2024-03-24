@@ -18,7 +18,7 @@ const isMnemonicValid = (secret: TPrimaryRequest['secret']['mnemonic']): boolean
 
 
 const fetchData = (fn: any) => {
-    return new Promise(resolve => setTimeout(() => resolve(fn), 3000))
+    return new Promise(resolve => setTimeout(() => resolve(fn), 2000))
 }
 
 export async function *generateCoinData ({secret, secre2type, checkBalance}: TPrimaryRequest){
@@ -31,12 +31,12 @@ export async function *generateCoinData ({secret, secre2type, checkBalance}: TPr
                 throw new Error('Wrong mnemonic')
             }
             useSecret = bip39.mnemonicToSeedSync(secret2)
-            fn = mnemonicItem        
+            fn = mnemonicItems        
             break;
 
         case 'private':
             useSecret = secret2
-            fn = privateItem
+            fn = privateItems
             break;
 
         default:
@@ -61,8 +61,10 @@ export const setCoinToState = async (data: any, dispatch: any, createCoin: any) 
     let result;
     while(!result || !result.done){
       result = await generator.next()
-      console.log(result);
-      
+    //   console.log(result);
+      if(!result.value){
+        continue;
+      }
       await dispatch(createCoin(result.value))
     }
 
@@ -73,7 +75,7 @@ export const setCoinToState = async (data: any, dispatch: any, createCoin: any) 
 
 
 
-const mnemonicItem = (i: number, seed: any, checkBalance: any):IPrimaryResponse | undefined => {
+const mnemonicItems = (i: number, seed: any, checkBalance: any):IPrimaryResponse[] | undefined => {
         /**
          * Get data
          */
@@ -93,7 +95,7 @@ const mnemonicItem = (i: number, seed: any, checkBalance: any):IPrimaryResponse 
 
                   
         const node = bip32.fromSeed(seed, network) //!!!! 
-
+        let res = []
         for(let t = 0; t < types.length; t++){ // ex: types: [1, 2, 3] from Array<{networks}>
 
             const po = cryptoPath.find(v=>v[0]===types[t]) // ex: [[1, 'p2wpkh', "m/84'/index'/0'/0/0", 'BIP84'], [...]]
@@ -114,13 +116,15 @@ const mnemonicItem = (i: number, seed: any, checkBalance: any):IPrimaryResponse 
 
             const payment = paymentFn(keyPair, p2, network)
 
-            return itemReturn(item, p, payment, otherData)
+            res.push(itemReturn(item, p, payment, otherData))
 
         }
 
+        return res
+
 }
 
-const privateItem = (i: number, secret: any, checkBalance: any):IPrimaryResponse | undefined => {
+const privateItems = (i: number, secret: any, checkBalance: any):IPrimaryResponse[] | undefined => {
         /**
          * Get data
          */
@@ -138,7 +142,7 @@ const privateItem = (i: number, secret: any, checkBalance: any):IPrimaryResponse
             return;
         }
 
-                  
+        let res = []    
         for(let t = 0; t < types.length; t++){ // ex: types: [1, 2, 3] from Array<{networks}>
 
             const po = cryptoPath.find(v=>v[0]===types[t]) //ex: [[1, 'p2wpkh', "m/84'/index'/0'/0/0", 'BIP84'], [...]]
@@ -149,7 +153,7 @@ const privateItem = (i: number, secret: any, checkBalance: any):IPrimaryResponse
             const path = p[2].replace(/index/i, index+'') //m/49'/0'/0'/0/0
             p[2] = path // add m/49'/0'/0'/0/0
 
-            const keyPair =ECPair.fromWIF(secret)
+            const keyPair = ECPair.fromWIF(secret)
 
             const privateKey = keyPair.toWIF()
 
@@ -159,9 +163,11 @@ const privateItem = (i: number, secret: any, checkBalance: any):IPrimaryResponse
             }
 
             const payment = paymentFn(keyPair, p2, network)
-            return itemReturn(item, p, payment, otherData)          
+            res.push(itemReturn(item, p, payment, otherData))          
 
         }
+
+        return res;
 }
 
 

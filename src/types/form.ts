@@ -104,6 +104,7 @@ export interface IPrimaryResponse {
     privateKey?: string;
     path: string;
     type?: string;
+    typeName?: string;
     endpoint?: string;
     balance?: number | null | string;
     balanceIsLoading?: boolean;
@@ -122,6 +123,7 @@ export const itemReturn = (coin: ICoinData, pathItem: TPathItem, payment: any, o
     privateKey: otherData.privateKey,
     path: pathItem[2],
     type: pathItem[3],
+    typeName: pathItem[1],
     // endpoint: '',
     // balance: null,
     balanceIsLoading: otherData.balanceIsLoading,

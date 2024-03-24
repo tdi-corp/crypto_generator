@@ -46,6 +46,7 @@ import { createCoin, updateCoin } from "@/store/generatorSlice"
 import { useAppDispatch, useAppSelector } from "@/hooks/store"
 import { setCoinToState } from "@/lib/crypto"
 import { toast } from "@/components/ui/use-toast"
+import { Meta } from "@/components/Meta"
 
 
 
@@ -122,6 +123,10 @@ const Home = () => {
       await setCoinToState(data, dispatch, createCoin)
       .then(async () => {
 
+        if(!form.watch("checkBalance")){
+          return
+        }
+
         for(const item of stateRef.current) {
           const result = await dispatch(updateCoin(item)).unwrap()
 
@@ -143,6 +148,10 @@ const Home = () => {
 
     return (
       <>
+        <Meta
+          title="Crypto Generator"
+          description="Generate crypto addresses and check your balance"
+        />
         <Headline />
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -338,7 +347,7 @@ const PrivateKey = ({privateKey}: {privateKey: string | undefined}) => {
   )
 }
 
-const Headline = () => {
+const Headline = (): JSX.Element => {
   return (
     <div className="text-center">
       {/* <span className="text-xs font-black tracking-wide text-white uppercase">Pricing</span> */}

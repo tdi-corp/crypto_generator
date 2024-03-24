@@ -10,8 +10,8 @@ const initialState: {data: IPrimaryResponse[]} = {
 
 
 export const createCoin = createAsyncThunk<
-  IPrimaryResponse,
-  IPrimaryResponse
+  IPrimaryResponse[],
+  IPrimaryResponse[]
 >(
   'generator/createCoin',
   async (item) => {    
@@ -35,11 +35,25 @@ export const generatorSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(createCoin.fulfilled, (state, {payload}) => {  
-      const gnr = state.data  
-      if(payload){
-        gnr.push(payload)
-      } 
-      // console.log(current(state));           
+      const gnr = state.data
+
+      if(payload.length > 0) {
+        payload.map((item) => {
+
+          const stateIndex = gnr.findIndex(i => i.address === item.address)
+
+          if(stateIndex >= 0 ) {
+            gnr[stateIndex] = item
+
+          } else {
+
+            gnr.push(item)
+          }
+
+        })
+      }
+
+      // console.log(current(state.data));           
     })
     builder.addCase(updateCoin.fulfilled, (state, {payload}) => {
       const gnr = state.data
