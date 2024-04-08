@@ -17,8 +17,8 @@ const isMnemonicValid = (secret: TPrimaryRequest['secret']['mnemonic']): boolean
 
 
 
-const fetchData = (fn: any) => {
-    return new Promise(resolve => setTimeout(() => resolve(fn), 2000))
+const fetchData = (fn: any, ms = 2000) => {
+    return new Promise(resolve => setTimeout(() => resolve(fn), ms))
 }
 
 export async function *generateCoinData ({secret, secre2type, checkBalance}: TPrimaryRequest){
@@ -61,7 +61,6 @@ export const setCoinToState = async (data: any, dispatch: any, createCoin: any) 
     let result;
     while(!result || !result.done){
       result = await generator.next()
-    //   console.log(result);
       if(!result.value){
         continue;
       }
