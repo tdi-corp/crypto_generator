@@ -3,9 +3,9 @@ import { BIP32Factory, BIP32Interface } from 'bip32'
 import { ECPairFactory, ECPairInterface } from 'ecpair';
 import * as ecc from 'tiny-secp256k1'
 import * as bitcoin from 'bitcoinjs-lib'
-import {libs} from './bitcoinjs-extensions'
+import {libs} from '@/data/bitcoinjs-extensions'
 
-import { coins, cryptoPath } from './networks';
+import { coins, cryptoPath } from '@/data/networks';
 import { TCryptoPathName, TPathItem } from '@/types/networks';
 import { TPrimaryRequest, IPrimaryResponse, itemReturn } from '@/types/form';
 

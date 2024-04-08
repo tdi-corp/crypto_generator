@@ -1,6 +1,6 @@
 import axios, { AxiosPromise } from 'axios'
 import { IPrimaryResponse, IStf } from '@/types/form'
-import { getBalanceEndpoints, endpointServicesData } from './networks'
+import { getBalanceEndpoints, endpointServicesData } from '@/data/networks'
 
 
 const awaitTime = 3000
