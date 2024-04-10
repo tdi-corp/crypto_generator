@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { ICoinData, TPathItem } from "./networks"
+import { ICoinData, TCryptoPathName, TPathItem } from "./networks"
 
 // const formSchema = z.object({
 //     'secre2type': z.enum([
@@ -95,7 +95,19 @@ export const defaultValues: TPrimaryRequest = {
   checkBalance: true,
 }
 
+export interface IAllNetworksPath {
+  id: string;
+  index: number;
+  code: string;
+  name: string;
+  network: string;
+  path: string;
+  pathName: TCryptoPathName,
+  pathDesc: string 
+}
+
 export interface IPrimaryResponse {
+    id: string;
     index: number;
     code: string;
     name: string;
@@ -103,8 +115,8 @@ export interface IPrimaryResponse {
     address: string;
     privateKey?: string;
     path: string;
-    type?: string;
-    typeName?: string;
+    pathName?: string;
+    pathDesc?: string;
     endpoint?: string;
     balance?: number | null | string;
     balanceIsLoading?: boolean;
@@ -113,17 +125,31 @@ export interface IPrimaryResponse {
     balanceResponseStatus?: number;
 }
 
-export const itemReturn = (coin: ICoinData, pathItem: TPathItem, payment: any, otherData: any ): IPrimaryResponse => {
+export const allNetworksPathReturn = (coin: ICoinData, pathItem: TPathItem, otherData: any ): IAllNetworksPath => {
   return {
+    id: otherData.id,
     index: coin.index,
     code: coin.code,
     name: coin.name,
     network: coin.network,
+    path: pathItem[2],
+    pathName: pathItem[1],
+    pathDesc: pathItem[3] 
+  }
+}
+
+export const itemReturnNew = (allNetworksPath: IAllNetworksPath, payment: any, otherData: any ): IPrimaryResponse => {
+  return {
+    id: allNetworksPath.id,
+    index: allNetworksPath.index,
+    code: allNetworksPath.code,
+    name: allNetworksPath.name,
+    network: allNetworksPath.network,
     address: payment.address,
     privateKey: otherData.privateKey,
-    path: pathItem[2],
-    type: pathItem[3],
-    typeName: pathItem[1],
+    path: allNetworksPath.path,
+    pathName: allNetworksPath.pathName,
+    pathDesc: allNetworksPath.pathDesc,
     // endpoint: '',
     // balance: null,
     balanceIsLoading: otherData.balanceIsLoading,

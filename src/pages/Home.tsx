@@ -120,7 +120,7 @@ const Home = () => {
 
     const onSubmit: SubmitHandler<TPrimaryRequest> = async (data) => {
 
-      await setCoinToState(data, dispatch, createCoin)
+      await setCoinToState({...data, rowSelections: JSON.parse(localStorage.getItem('rowSelections') || '{}') }, dispatch, createCoin)
       .then(async () => {
 
         if(!form.watch("checkBalance")){

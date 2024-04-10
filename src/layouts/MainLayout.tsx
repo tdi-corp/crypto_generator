@@ -6,8 +6,17 @@ import Content from "../components/Content";
 import { Toaster } from "@/components/ui/Toaster"
 import docsDarkAVIF from "@/media/docs-dark.avif"
 import docsDarkPNG from "@/media/docs-dark.png"
+import { useAppDispatch } from "@/hooks/store";
+import React from "react";
+import { setTableData } from "@/store/networksPathSlice";
 
 const MainLayout = () => {
+
+    const dispatch = useAppDispatch()
+
+    React.useEffect(() => {
+      dispatch(setTableData())
+    }, [])    
     
     return (
         <>

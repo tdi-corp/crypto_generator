@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import generatorReducer from './generatorSlice'
+import networksPathSlice from './networksPathSlice'
 
 
 export const store = configureStore({
   reducer: {
-    generator: generatorReducer
+    generator: generatorReducer,
+    networksPath: networksPathSlice
   },
 })
 
