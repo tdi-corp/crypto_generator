@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -13,7 +12,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 import {
   Table,
   TableBody,
@@ -23,20 +21,10 @@ import {
   TableRow,
 } from "@/components/ui/Table"
 import { Input } from "@/components/ui/Input"
-import { Button } from "@/components/ui/Button"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/DropdownMenu"
 import { columns } from "./Columns"
 import { getAllNetworksPath } from "@/lib/getAllNetworksPath"
 import { useAppDispatch, useAppSelector } from "@/hooks/store"
-import { setRowSelectionsData, setTableData } from "@/store/networksPathSlice"
+import { setRowSelectionsData } from "@/store/networksPathSlice"
 
 
 const data = getAllNetworksPath()
@@ -47,10 +35,6 @@ export function DataTable() {
   const rowSelectionData = useAppSelector((state) => state.networksPath.rowSelections)
   const tableData = useAppSelector((state) => state.networksPath.tableData)
   const dispatch = useAppDispatch()
-
-  // React.useEffect(() => {
-  //   dispatch(setTableData())
-  // }, [])
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
