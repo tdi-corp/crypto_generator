@@ -197,33 +197,35 @@ const Home = () => {
                       </FormItem>
                     )}
                   />
+                  <div className="mt-10">
+                    <FormField
+                      control={form.control}
+                      name="checkBalance"
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={(checked) => field.onChange(checked)}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Get Balance
+                            </FormLabel>
+                          </FormItem>
+                        )
+                      }}
+                    />
+                  </div>
+
                 </div>
   
                 <MainWindow form={form} />
 
                 <div className="p-8">
-
-                  <FormField
-                    control={form.control}
-                    name="checkBalance"
-                    render={({ field }) => {
-                      return (
-                        <FormItem
-                          className="flex flex-row items-start space-x-3 space-y-0"
-                        >
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={(checked) => field.onChange(checked)}
-                            />
-                          </FormControl>
-                          <FormLabel className="font-normal">
-                            Get Balance
-                          </FormLabel>
-                        </FormItem>
-                      )
-                    }}
-                  />
 
                   <ClearButton />
 
@@ -355,7 +357,7 @@ const ClearButton = () => {
   return (
     <Button 
       variant="outline"
-      className="w-full mt-5"
+      className="w-full"
       onClick={(e) => {
         e.preventDefault();
         dispatch(clear())
