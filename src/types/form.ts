@@ -103,7 +103,8 @@ export interface IAllNetworksPath {
   network: string;
   path: string;
   pathName: TCryptoPathName,
-  pathDesc: string 
+  pathDesc: string,
+  endpoint: string | null
 }
 
 export interface IPrimaryResponse {
@@ -117,7 +118,7 @@ export interface IPrimaryResponse {
     path: string;
     pathName?: string;
     pathDesc?: string;
-    endpoint?: string;
+    endpoint?: string | null;
     balance?: number | null | string;
     balanceIsLoading?: boolean;
     balanceResponseIsError?: boolean;
@@ -134,7 +135,8 @@ export const allNetworksPathReturn = (coin: ICoinData, pathItem: TPathItem, othe
     network: coin.network,
     path: pathItem[2],
     pathName: pathItem[1],
-    pathDesc: pathItem[3] 
+    pathDesc: pathItem[3],
+    endpoint: otherData.endpoint
   }
 }
 

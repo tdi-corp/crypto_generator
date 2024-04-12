@@ -37,7 +37,7 @@ const getBalanceFromResponseData = (data: object, keys: Array<string>): [boolean
 } 
 
 
-const getCryptoAddressesBalanceFromItem = async (item: IPrimaryResponse): Promise<IPrimaryResponse>=> {
+export const getCryptoAddressesBalanceFromItem = async (item: IPrimaryResponse): Promise<IPrimaryResponse>=> {
 
         if(!item.balanceIsLoading){
             item['balanceResponseErrorMessage'] = 'Balance not need check'
@@ -45,9 +45,9 @@ const getCryptoAddressesBalanceFromItem = async (item: IPrimaryResponse): Promis
             return await asyncData(item, awaitTime)
         }
 
-        const nid = item.network
+        const net = item.network
 
-        const allAPIData = getBalanceEndpoints.filter(ep => ep[0] === nid) // Get all need api data [] for this cryptocoin       
+        const allAPIData = getBalanceEndpoints.filter(ep => ep[0] === net) // Get all need api data [] for this cryptocoin       
         const getFirstAPIData = allAPIData.length > 0 ? allAPIData[0] : null //then take first
 
         if(!getFirstAPIData){
@@ -224,8 +224,3 @@ const getCryptoAddressesBalanceFromItem = async (item: IPrimaryResponse): Promis
 //     // const url = `https://api.blockcypherd.com/v1/btc/main/addrs/bc1q9ppwz0ewr093audq2zxtvwujq9qjdh9hetslkm/balance`
 
 // }
-
-export {
-    // getCryptoAddressesBalanceFromArray,
-    getCryptoAddressesBalanceFromItem
-}
