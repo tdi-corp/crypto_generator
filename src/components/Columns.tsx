@@ -3,7 +3,12 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/Checkbox"
 import { IAllNetworksPath } from "@/types/form"
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/Tooltip"
 
 export const columns: ColumnDef<IAllNetworksPath>[] = [
   {
@@ -40,7 +45,30 @@ export const columns: ColumnDef<IAllNetworksPath>[] = [
     ),
   },
   {
-    accessorKey: "code"
+    accessorKey: "path",
+    header: "Path Description",
+    cell: ({row}) => (
+      <div>
+        <div>{row.original.pathName} | {row.original.pathDesc}</div>
+        <div className="text-xs">{row.original.path}</div>
+      </div>
+    )
+  },
+  {
+    accessorKey: "endpoint",
+    header: "Endpoint",
+    cell: ({row}) => (
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>{row.original.endpoint?.slice(0, 30)}...</TooltipTrigger>
+          <TooltipContent>
+            <p>{row.original.endpoint}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>      
+
+    )
   },
   // {
   //   accessorKey: "email",
