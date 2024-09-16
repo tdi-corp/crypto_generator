@@ -184,14 +184,14 @@ const Home = () => {
                                 Private key
                               </FormLabel>
                             </FormItem>
-                            <FormItem className="flex items-center space-x-3 space-y-0">
+                            {/* <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
                                 <RadioGroupItem value="address"/>
                               </FormControl>
                               <FormLabel>
                                 Address
                               </FormLabel>
-                            </FormItem>                                      
+                            </FormItem>                                       */}
                           </RadioGroup>
                         </FormControl>
                       </FormItem>
