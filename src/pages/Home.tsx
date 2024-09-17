@@ -40,15 +40,15 @@ import { Badge } from "@/components/ui/Badge"
 
 import { Checkbox } from "@/components/ui/Checkbox"
 
-import { formSchema, secretFieldData, defaultValues, TPrimaryRequest, IPrimaryResponse } from "@/types/form"
+import { formSchema, secretFieldData, TPrimaryRequest, IPrimaryResponse } from "@/types/form"
 import { EyeClosedIcon, EyeOpenIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons"
 import { clear, createCoin, updateCoin } from "@/store/generatorSlice"
+import { updateFormData } from "@/store/formSlice"
 import { useAppDispatch, useAppSelector } from "@/hooks/store"
 import { setCoinToState } from "@/lib/crypto"
 import { toast } from "@/components/ui/use-toast"
 import { Meta } from "@/components/Meta"
-
-
+import {useDeepCompareEffect} from "react-use"
 
 
 const SecretField = ({form, secre2type}: {form: UseFormReturn<TPrimaryRequest>, secre2type: TPrimaryRequest['secre2type']}) => {
@@ -106,6 +106,7 @@ const MainWindow = ({form}: {form: UseFormReturn<TPrimaryRequest>}) => {
 
 const Home = () => {
     const gens = useAppSelector((state)=> state.generator.data)
+    const defaultFormValues = useAppSelector((state) => state.form.formData)
     const dispatch = useAppDispatch()
     const stateRef = useRef<IPrimaryResponse[]>([])
 
@@ -114,8 +115,21 @@ const Home = () => {
 
     const form = useForm<TPrimaryRequest>({
       resolver: zodResolver(formSchema),
-      defaultValues
+      defaultValues: defaultFormValues
     })
+    
+    const watchForm = form.watch([
+      "secre2type",
+      "secret.mnemonic", 
+      "secret.private",
+      "checkBalance"
+    ]);
+
+    useDeepCompareEffect(() => {
+      
+      dispatch(updateFormData(form.getValues()))
+
+    }, [watchForm])
 
 
     const onSubmit: SubmitHandler<TPrimaryRequest> = async (data) => {
