@@ -32,7 +32,14 @@ export const coins: ICoinData[] = [
         index: 145,
         types: [3], // 3 - done with trustWallet
         network: 'bitcoin'
-    },    
+    },   
+    {
+        code: 'BSV',
+        name: 'BitcoinSV',
+        index: 236,
+        types: [3], // 3 - done with trustWallet
+        network: 'bitcoin'
+    },      
     {
         code: 'LTC',
         name: 'Litecoin',
