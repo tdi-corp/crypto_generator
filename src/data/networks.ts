@@ -27,6 +27,13 @@ export const coins: ICoinData[] = [
         isTestingNet: true
     },    
     {
+        code: 'BCH',
+        name: 'Bitcoin Cash',
+        index: 145,
+        types: [3], // 3 - done with trustWallet
+        network: 'bitcoin'
+    },    
+    {
         code: 'LTC',
         name: 'Litecoin',
         index: 2,
@@ -40,13 +47,6 @@ export const coins: ICoinData[] = [
         types: [2, 3, 4],
         network: 'bgold'
     }, 
-    // {
-    //     code: 'BCH',
-    //     name: 'Bitcoin Cash',
-    //     index: 145,
-    //     types: [1, 2, 3],
-    //     network: ''
-    // },    
     {
         code: 'DOGE',
         name: 'Dogecoin',
@@ -60,7 +60,7 @@ export const coins: ICoinData[] = [
 export const cryptoPath: TPathItem[] = [
     [1, 'p2wpkh', "m/84'/index'/0'/0/0", 'BIP84'],
     [2, 'p2sh', "m/49'/index'/0'/0/0", 'BIP49'],
-    [3, 'legacy', "m/44'/index'/0'/0/0", 'BIP44 Legacy'],
+    [3, 'legacy', "m/44'/index'/0'/0/0", 'BIP44 Legacy'], //
     [4, 'multibit', "m/0'/0/0", 'BIP32 MultiBit HD'],
 ]
     
@@ -85,11 +85,11 @@ const address = 'address'
 export const getBalanceEndpoints: Array<[string, keyof typeof EendpointServices, IStf]> = [
 
     //['bitcoin', 'blockcypher', {code, chain: '_main', address}], //btc
-    ['bitcoin', 'blockchain_com', {address}], 
+    ['BTC', 'blockchain_com', {address}], 
 
     // ['litecoin', 'blockcypher', {code, chain: '_main', address}], //ltc
 
-    ['dogecoin', 'blockcypher', {code, chain: '_main', address}], //doge
+    ['DOGE', 'blockcypher', {code, chain: '_main', address}], //doge
 ]
 
 // const clients: TClients = {

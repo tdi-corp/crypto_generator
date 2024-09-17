@@ -4,6 +4,7 @@ import { ECPairFactory, ECPairInterface } from 'ecpair';
 import * as ecc from 'tiny-secp256k1'
 import * as bitcoin from 'bitcoinjs-lib'
 import {libs} from '@/data/bitcoinjs-extensions'
+import bchaddr from 'bchaddrjs';
 
 import { TCryptoPathName } from '@/types/networks';
 import { TPrimaryRequest, IPrimaryResponse, itemReturnNew, IAllNetworksPath } from '@/types/form';
@@ -19,7 +20,7 @@ const isMnemonicValid = (secret: TPrimaryRequest['secret']['mnemonic']): boolean
 
 
 
-const fetchData = (fn: any, ms = 1000) => {
+const fetchData = (fn: any, ms = 400) => {
     return new Promise(resolve => setTimeout(() => resolve(fn), ms))
 }
 
@@ -101,6 +102,7 @@ const mnemonicItem = (item: any, seed: any, checkBalance: any):IPrimaryResponse 
         const net = item.network //bitcoin
         const pathOrigin = item.path // "m/84'/0'/0'/0/0"
         const pathName = item.pathName //p2sh
+        const code = item.code;
 
         
         /**
@@ -123,7 +125,7 @@ const mnemonicItem = (item: any, seed: any, checkBalance: any):IPrimaryResponse 
             privateKey 
         }
 
-        const payment = paymentFn(keyPair, pathName, network)        
+        const payment = paymentFn(keyPair, pathName, network, code)        
         
         return itemReturnNew(item, payment, otherData)
 }
@@ -136,6 +138,7 @@ const privateItem = (item: any, secret: any, checkBalance: any):IPrimaryResponse
         const net = item.network //bitcoin
         const pathOrigin = item.path // "m/84'/0'/0'/0/0"
         const pathName = item.pathName //p2sh
+        const code = item.code //BCH
 
         
         /**
@@ -157,29 +160,55 @@ const privateItem = (item: any, secret: any, checkBalance: any):IPrimaryResponse
             privateKey 
         }
 
-        const payment = paymentFn(keyPair, pathName, network)        
+        const payment = paymentFn(keyPair, pathName, network, code)        
         
         return itemReturnNew(item, payment, otherData)
 }
 
 
-const paymentFn = (keyPair: ECPairInterface | BIP32Interface, type: TCryptoPathName, network: any): any => {
+const paymentFn = (keyPair: ECPairInterface | BIP32Interface, type: TCryptoPathName, network: any, code: any): any => {
+
+    let payment, address = null
+
 
     switch (type) {
-        case 'p2wpkh':          
-            return bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network });
+        case 'p2wpkh':     
+            payment = bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network });
+            break;
         case 'p2sh':
-            return bitcoin.payments.p2sh({
+            payment = bitcoin.payments.p2sh({
                 redeem: bitcoin.payments.p2wpkh({ pubkey: keyPair.publicKey, network }),
             });
+            break;
         case 'legacy':
-            return bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network  });
+            payment = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network  });
+            break;
         case 'multibit':
             //return bitcoin.payments.p2ms({ pubkey: keyPair.publicKey, network })
             //return bitcoin.payments.p2pk({ pubkey: keyPair.publicKey, network })
             //return bitcoin.payments.p2wsh({ pubkey: keyPair.publicKey, network })
-            return bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network });
+            payment = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network });
+            break;
         default:
-            return null;
+            payment = {address: null};
     }
+    address = payment?.address
+    if(code === "BCH" && address) {
+
+        if((bchaddr.isMainnetAddress)(address)) {
+
+            // const toLegacyAddress = bchaddr.toLegacyAddress;
+            // const toBitpayAddress = bchaddr.toBitpayAddress;
+            const toCashAddress = bchaddr.toCashAddress;
+            
+            address = toCashAddress(address) //d
+            // toLegacyAddress('qph5kuz78czq00e3t85ugpgd7xmer5kr7c5f6jdpwk') // 1B9UNtBfkkpgt8kVbwLN9ktE62QKnMbDzR
+            // toBitpayAddress('1B9UNtBfkkpgt8kVbwLN9ktE62QKnMbDzR') // CScMwvXjdooDnGevHgfHjGWFi9cjk75Aaj
+            // toCashAddress('1B9UNtBfkkpgt8kVbwLN9ktE62QKnMbDzR') // bitcoincash:qph5kuz78czq00e3t85ugpgd7xmer5kr7c5f6jdpwk
+        }
+
+
+    }
+
+    return {...payment, address}
 }

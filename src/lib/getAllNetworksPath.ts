@@ -17,6 +17,8 @@ const getAllNetworksPath = (): IAllNetworksPath[] => {
         const index = item.index //0-btc, 1-btctest
         const net = item.network //bitcoin
         const types = item.types //array
+        const code = item.code;
+        const codeLower = code.toLocaleLowerCase()
 
         /**
          * Get network lib from libs
@@ -39,7 +41,7 @@ const getAllNetworksPath = (): IAllNetworksPath[] => {
 
 
 
-            const allAPIData = getBalanceEndpoints.filter(ep => ep[0] === net) // Get all need api data [] for this cryptocoin       
+            const allAPIData = getBalanceEndpoints.filter(ep => ep[0] === code) // Get all need api data [] for this cryptocoin       
             const getFirstAPIData = allAPIData.length > 0 ? allAPIData[0] : null //then take first
  
             let url = null
@@ -56,7 +58,7 @@ const getAllNetworksPath = (): IAllNetworksPath[] => {
 
 
             const otherData: {id: string, endpoint: string | null} = {
-                id: `${net}_${p[0]}`,
+                id: `${codeLower}_${p[0]}`,
                 endpoint: url
             }
 

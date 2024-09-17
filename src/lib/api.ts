@@ -45,9 +45,9 @@ export const getCryptoAddressesBalanceFromItem = async (item: IPrimaryResponse):
             return await asyncData(item, awaitTime)
         }
 
-        const net = item.network
+        const code = item.code
 
-        const allAPIData = getBalanceEndpoints.filter(ep => ep[0] === net) // Get all need api data [] for this cryptocoin       
+        const allAPIData = getBalanceEndpoints.filter(ep => ep[0] === code) // Get all need api data [] for this cryptocoin       
         const getFirstAPIData = allAPIData.length > 0 ? allAPIData[0] : null //then take first
 
         if(!getFirstAPIData){
